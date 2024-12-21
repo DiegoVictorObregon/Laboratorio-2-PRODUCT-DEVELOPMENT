@@ -1,0 +1,69 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/data/load_data.py
+    deps:
+    - path: src/data/load_data.py
+      hash: md5
+      md5: 2e4b6a968c8f546e10f2cf6f0475fcc4
+      size: 551
+  create_features:
+    cmd: python src/data/create_features.py
+    deps:
+    - path: data/raw/test.csv
+      hash: md5
+      md5: 7533b82eae4b582610cbd68aa636b017
+      size: 28629
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 2309cc5f04782ed9bb6016d9f4e381cf
+      size: 61194
+    - path: src/data/create_features.py
+      hash: md5
+      md5: 7773c3d7b536a11f6fc423af7d28b375
+      size: 1507
+    outs:
+    - path: data/processed/test_featured.pkl
+      hash: md5
+      md5: 54cd96bb333e842dcbeb5f3816e4c349
+      size: 25756
+    - path: data/processed/train_featured.pkl
+      hash: md5
+      md5: aaa545212c46cc9f90f7c0e8cc3075d3
+      size: 60810
+  train_model:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/processed/train_featured.pkl
+      hash: md5
+      md5: aaa545212c46cc9f90f7c0e8cc3075d3
+      size: 60810
+    - path: src/models/train_model.py
+      hash: md5
+      md5: a99d18ac8645fff80986216ae8400ca2
+      size: 977
+    outs:
+    - path: models/random_forest_model.pkl
+      hash: md5
+      md5: bd2e109468b083d001d8f362235c3a72
+      size: 2210073
+  predict:
+    cmd: python src/models/predict.py
+    deps:
+    - path: data/processed/test_featured.pkl
+      hash: md5
+      md5: 54cd96bb333e842dcbeb5f3816e4c349
+      size: 25756
+    - path: models/random_forest_model.pkl
+      hash: md5
+      md5: bd2e109468b083d001d8f362235c3a72
+      size: 2210073
+    - path: src/models/predict.py
+      hash: md5
+      md5: 1d2a591f28fc3973472abeeb8f868ac8
+      size: 1074
+    outs:
+    - path: predictions/test_predictions.csv
+      hash: md5
+      md5: 8dd6a56b2765abb88d31964b1319061c
+      size: 1264
