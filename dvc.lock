@@ -48,22 +48,34 @@ stages:
       md5: bd2e109468b083d001d8f362235c3a72
       size: 2210073
   predict:
-    cmd: python src/models/predict.py
+    cmd: python src/pipelines/predict_pipeline.py
     deps:
-    - path: data/processed/test_featured.pkl
+    - path: artifacts/trained_pipeline.pkl
       hash: md5
-      md5: 54cd96bb333e842dcbeb5f3816e4c349
-      size: 25756
-    - path: models/random_forest_model.pkl
-      hash: md5
-      md5: bd2e109468b083d001d8f362235c3a72
-      size: 2210073
-    - path: src/models/predict.py
-      hash: md5
-      md5: 1d2a591f28fc3973472abeeb8f868ac8
-      size: 1074
+      md5: d5192f379a4c268b5f637c653f364df1
+      size: 195538
     outs:
-    - path: predictions/test_predictions.csv
+    - path: data/predictions/
       hash: md5
-      md5: 8dd6a56b2765abb88d31964b1319061c
-      size: 1264
+      md5: 821bfb5d2b0c3c03e852f957846df232.dir
+      size: 463
+      nfiles: 1
+  create_base_pipeline:
+    cmd: python src/pipelines/create_features_and_base_pipeline.py
+    outs:
+    - path: artifacts/base_pipeline.pkl
+      hash: md5
+      md5: 16f52eb943736fff89cc5e2923e42593
+      size: 235
+  configure_and_fit:
+    cmd: python src/pipelines/configure_and_fit_pipeline.py
+    deps:
+    - path: artifacts/base_pipeline.pkl
+      hash: md5
+      md5: 16f52eb943736fff89cc5e2923e42593
+      size: 235
+    outs:
+    - path: artifacts/trained_pipeline.pkl
+      hash: md5
+      md5: d5192f379a4c268b5f637c653f364df1
+      size: 195538
